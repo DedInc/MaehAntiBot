@@ -1,0 +1,11 @@
+name: MaehAntiBot
+description: Make your server cleaned from retards!
+version: 1.0
+api-version: 1.13
+author: DedInc.
+main: com.github.dedinc.maehantibot.MaehAntiBot
+commands:
+  mab:
+    description: Reload command.
+    usage: /<command>
+    permission: maehantibot.reload

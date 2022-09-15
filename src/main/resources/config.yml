@@ -1,0 +1,51 @@
+messages:
+  proxy: '&cProxy is not allowed!'
+  firewall: '&cYour country is not allowed on this server!'
+
+iphub: #Please register in iphub.info, enter login and password (for AntiVPN)
+  enabled: false
+  login: ''
+  password: ''
+
+firewall:
+  enabled: false
+  blocked: false #If true black country list, If false - allowed country list
+  list: #Default countries from CIS
+    - AM
+    - AZ
+    - BY
+    - KZ
+    - KG
+    - MD
+    - RU
+    - TJ
+    - UZ
+    - UA
+
+passwords: #Passwords analyzer
+  enabled: true
+  matches: 3 #Matches to punish
+  storage: 15 #Max passwords to save
+  handleList:
+    - /reg
+    - /register
+  action: 'ban-ip %ip%' #Action with console syntax
+
+chat: #Chat analyzer
+  enabled: true
+  coefficient: 0.9 #The percentage of similarity of the last two messages (90%)
+  seconds: 180 #The time that the check will be valid from the moment player log in to the server (3 minutes)
+  flags: 3 #Flags to punish
+  handleList:
+    - /m
+    - /msg
+    - /r
+    - /t
+    - /tell
+  action: 'kick %player% ChatBot!'
+
+nicks: #Nicks analyzer
+  enabled: true
+  coefficient: 0.8 #Percentage of similarity of nicknames (80%)
+  storage: 10 #Max nicks to save
+  action: 'ban-ip %ip%'
