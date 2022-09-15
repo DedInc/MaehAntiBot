@@ -62,6 +62,10 @@ public class MaehAntiBot extends JavaPlugin {
 
         CommandManager.load(this);
         EventManager.register(this);
+
+        if (fc.getBoolean("nicks.enabled")) {
+            Bukkit.getLogger().info("Nicks analyze enabled!");
+        }
     }
 
     @Override
