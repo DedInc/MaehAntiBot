@@ -1,9 +1,12 @@
 package com.github.dedinc.maehantibot.event.events;
 
 import com.github.dedinc.maehantibot.Messages;
+import com.github.dedinc.maehantibot.Storage;
 import com.github.dedinc.maehantibot.utils.ConfigUtils;
 import com.github.dedinc.maehantibot.utils.IPHubUtils;
+import com.github.dedinc.maehantibot.utils.StringUtils;
 import com.maxmind.geoip.LookupService;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,6 +25,8 @@ public class JoinEvent implements Listener {
 
     @EventHandler
     public void onJoin(final AsyncPlayerPreLoginEvent e) {
+        final String ip = e.getAddress().getHostName();
+        final String name = e.getName();
         final FileConfiguration fc = ConfigUtils.Configs.CONFIG.getConfig();
         if (fc.getBoolean("firewall.enabled")) {
             try {
@@ -44,6 +49,29 @@ public class JoinEvent implements Listener {
 
         if (fc.getBoolean("iphub.enabled") && IPHubUtils.checkIP(e.getAddress().getHostAddress())) {
             e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Messages.proxy);
+            return;
+        }
+
+        if (fc.getBoolean("nicks.enabled")) {
+            if (Storage.lastNames.size() > 0) {
+                for (String nick : Storage.lastNames) {
+                    if (!name.equals(nick) && StringUtils.checkSimilarity(name, nick) >= fc.getDouble("nicks.coefficient")) {
+                        Bukkit.getScheduler().runTask(plugin, () -> {
+                            for (String action : fc.getStringList("nicks.actions")) {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), StringUtils.setPlacehoders(action, Bukkit.getPlayer(nick).getAddress().getHostName(), nick));
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), StringUtils.setPlacehoders(action, ip, name));
+                            }
+                        });
+                        return;
+                    }
+                }
+            }
+            if (Storage.lastNames.size() >= fc.getInt("nicks.storage")) {
+                Storage.lastNames.clear();
+            }
+            if (!Storage.lastNames.contains(name)) {
+                Storage.lastNames.add(name);
+            }
         }
     }
 }

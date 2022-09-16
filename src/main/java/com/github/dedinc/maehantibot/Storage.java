@@ -1,7 +1,6 @@
 package com.github.dedinc.maehantibot;
 
 import org.bukkit.scheduler.BukkitTask;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 

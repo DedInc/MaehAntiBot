@@ -1,8 +1,6 @@
 package com.github.dedinc.maehantibot.utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-
 public class StringUtils {
 
     public static boolean checkContains(String s, String[] strs, int condition) {
@@ -59,6 +57,10 @@ public class StringUtils {
                 chars.put(str.charAt(i), (float) count[str.charAt(i)]);
         }
         return chars;
+    }
+
+    public static String setPlacehoders(String s, String ip, String name) {
+        return s.replaceAll("%ip%",  ip).replaceAll("%player%", name);
     }
 
     public static int getUniqueCount(String s1) {

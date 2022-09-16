@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class AnalyzeUtils {
 
     public static void analyzeChat(JavaPlugin plugin, Player p, String message) {
+        final String ip = p.getAddress().getHostName();
         final String name = p.getName();
         final FileConfiguration fc = ConfigUtils.Configs.CONFIG.getConfig();
         if (Storage.analyzeList.containsKey(name) && Storage.flagList.containsKey(name)) {
@@ -22,7 +23,11 @@ public class AnalyzeUtils {
                     Storage.tasks.get(name).cancel();
                     Storage.tasks.remove(name);
                 }
-                Bukkit.getScheduler().runTask(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), fc.getString("chat.action").replaceAll("%ip%", p.getAddress().getHostName()).replaceAll("%player%", name)));
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    for (String action : fc.getStringList("chat.actions")) {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), StringUtils.setPlacehoders(action, ip, name));
+                    }
+                });
                 return;
             }
             Storage.analyzeList.put(name, message);

@@ -56,6 +56,10 @@ public class MaehAntiBot extends JavaPlugin {
             IPHubUtils.getSession(fc.getString("iphub.login"), fc.getString("iphub.password"));
         }
 
+        if (fc.getBoolean("blacklist.enabled")) {
+            Bukkit.getLogger().info("Blacklist analyze enabled!");
+        }
+
         if (fc.getBoolean("firewall.enabled")) {
             Bukkit.getLogger().info("Firewall enabled!");
         }

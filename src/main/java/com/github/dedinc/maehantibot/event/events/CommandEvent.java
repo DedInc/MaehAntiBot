@@ -24,6 +24,8 @@ public class CommandEvent implements Listener {
 
     @EventHandler
     public void onCommand(final PlayerCommandPreprocessEvent e) {
+        final String ip = e.getPlayer().getAddress().getHostName();
+        final String name = e.getPlayer().getName();
         final FileConfiguration fc = ConfigUtils.Configs.CONFIG.getConfig();
         if (fc.getBoolean("passwords.enabled")) {
             final List<String> handles = fc.getStringList("passwords.handleList");
@@ -32,9 +34,8 @@ public class CommandEvent implements Listener {
                 try {
                     String[] dem = e.getMessage().split(" ");
                     String password = dem[dem.length - 1];
-                    String player = e.getPlayer().getName();
-                    if (!lastPasswords.containsKey(player)) {
-                        lastPasswords.put(player, password);
+                    if (!lastPasswords.containsKey(name)) {
+                        lastPasswords.put(name, password);
                     }
                     int i = 0;
                     for (String pass : lastPasswords.values()) {
@@ -42,11 +43,15 @@ public class CommandEvent implements Listener {
                             i++;
                         }
                     }
-                    if (i >= fc.getInt("passwords.matches") && lastPasswords.containsKey(player)) {
+                    if (i >= fc.getInt("passwords.matches") && lastPasswords.containsKey(name)) {
                         e.setCancelled(true);
                         for (String nick : lastPasswords.keySet()) {
-                            if (lastPasswords.get(player).equals(password)) {
-                                Bukkit.getScheduler().runTask(plugin, () -> Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), fc.getString("passwords.action").replaceAll("%ip%", e.getPlayer().getAddress().getHostName()).replaceAll("%nick%", nick)));
+                            if (lastPasswords.get(name).equals(password)) {
+                                Bukkit.getScheduler().runTask(plugin, () -> {
+                                    for (String action : fc.getStringList("passwords.actions")) {
+                                        Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), StringUtils.setPlacehoders(action, ip, nick));
+                                    }
+                                });
                                 return;
                             }
                         }

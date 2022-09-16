@@ -15,7 +15,7 @@ public class IPHubUtils {
 
     public static void getSession(String login, String password) {
         csfr = RequestUtils.get("https://iphub.info/login", null).split("token\" content=\"")[1].split("\"")[0];
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, String> params = new HashMap<>();
         params.put("_token", csfr);
         params.put("email", login);
         params.put("password", password);

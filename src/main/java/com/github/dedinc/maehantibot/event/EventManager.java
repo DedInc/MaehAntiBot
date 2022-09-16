@@ -1,9 +1,6 @@
 package com.github.dedinc.maehantibot.event;
 
-import com.github.dedinc.maehantibot.event.events.ChatEvent;
-import com.github.dedinc.maehantibot.event.events.CommandEvent;
-import com.github.dedinc.maehantibot.event.events.JoinEvent;
-import com.github.dedinc.maehantibot.event.events.LoginEvent;
+import com.github.dedinc.maehantibot.event.events.*;
 import com.github.dedinc.maehantibot.utils.ConfigUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,7 +10,7 @@ public class EventManager {
 
     public static void register(JavaPlugin plugin) {
         final FileConfiguration fc = ConfigUtils.Configs.CONFIG.getConfig();
-        if (fc.getBoolean("iphub.enabled") || fc.getBoolean("firewall.enabled")) {
+        if (fc.getBoolean("iphub.enabled") || fc.getBoolean("firewall.enabled") || fc.getBoolean("nicks.enabled")) {
             new JoinEvent(plugin);
         }
 
@@ -27,7 +24,7 @@ public class EventManager {
             Bukkit.getLogger().info("Chat analyze enabled!");
         }
 
-        if (fc.getBoolean("chat.enabled") || fc.getBoolean("nicks.enabled")) {
+        if (fc.getBoolean("chat.enabled") ||fc.getBoolean("blacklist.enabled")) {
             new LoginEvent(plugin);
         }
     }

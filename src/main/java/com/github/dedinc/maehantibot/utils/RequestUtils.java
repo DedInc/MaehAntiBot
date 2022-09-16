@@ -1,9 +1,10 @@
 package com.github.dedinc.maehantibot.utils;
 
 import okhttp3.*;
+import org.bukkit.Bukkit;
 import java.net.CookieManager;
-import java.net.CookiePolicy;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class RequestUtils {
 
@@ -11,30 +12,41 @@ public class RequestUtils {
 
     public static String post(String url, HashMap<String, String> keys) {
         try {
-            cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
             FormBody.Builder builder = new FormBody.Builder();
+
             for (String key : keys.keySet()) {
                 builder.add(key, keys.get(key));
             }
+
             RequestBody formBody = builder.build();
+
             OkHttpClient client = new OkHttpClient.Builder()
-                    .cookieJar(new JavaNetCookieJar(cookieManager))
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(10, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
                     .build();
+
+            if (!url.contains("ipvoid")) {
+                client = new OkHttpClient.Builder()
+                        .cookieJar(new JavaNetCookieJar(cookieManager))
+                        .build();
+            }
+
             okhttp3.Request request = new okhttp3.Request.Builder()
                     .url(url)
                     .post(formBody)
-                    .build();;
+                    .build();
             Response response = client.newCall(request).execute();
             String resp = response.body().string();
             response.close();
             return resp;
-        } catch (Exception e) {}
+           } catch (Exception e) {
+        }
         return null;
     }
 
     public static String get(String url, HashMap<String, String> headers) {
         try {
-            cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
             OkHttpClient client = new OkHttpClient.Builder()
                     .cookieJar(new JavaNetCookieJar(cookieManager))
                     .build();
@@ -51,8 +63,7 @@ public class RequestUtils {
             String resp = res.body().string();
             res.close();
             return resp;
-        } catch (Exception e) {
-            e.printStackTrace();
+           } catch (Exception e) {
         }
         return null;
     }

@@ -19,7 +19,6 @@ public class ChatEvent implements Listener  {
 
     @EventHandler
     public void onChat(final AsyncPlayerChatEvent e) {
-        final String name = e.getPlayer().getName();
         final FileConfiguration fc = ConfigUtils.Configs.CONFIG.getConfig();
         AnalyzeUtils.analyzeChat(plugin, e.getPlayer(), e.getMessage());
     }
