@@ -26,13 +26,13 @@ public class LoginEvent implements Listener {
         final String nick = e.getPlayer().getName();
 
         if (fc.getBoolean("blacklist.enabled")) {
-            new BlacklistTask(plugin, ip, nick).runTask(plugin);
+            new BlacklistTask(plugin, ip, nick).runTaskAsynchronously(plugin);
         }
 
         if (fc.getBoolean("chat.enabled")) {
             Storage.analyzeList.put(nick, "");
             Storage.flagList.put(nick, 0);
-            Storage.tasks.put(nick, new AnalyzeTask(nick).runTaskLater(plugin, 20 * fc.getInt("chat.seconds")));
+            Storage.tasks.put(nick, new AnalyzeTask(nick).runTaskLaterAsynchronously(plugin, 20L * fc.getInt("chat.seconds")));
         }
     }
 }

@@ -9,12 +9,23 @@ public class Messages {
 
     public static String proxy = null;
     public static String firewall = null;
+    public static String ping = null;
 
     public static void loadMessages() {
         FileConfiguration fc = ConfigUtils.Configs.CONFIG.getConfig();
         for (Field field : Messages.class.getDeclaredFields()) {
             try {
                 field.set(null, fc.getString("messages." + field.getName()).replaceAll("&", "§"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void unloadMessages() {
+        for (Field field : Messages.class.getDeclaredFields()) {
+            try {
+                field.set(null, null);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -6,16 +6,33 @@ import java.util.HashMap;
 public class BlacklistUtils {
 
     public static boolean checkIP(String ip) {
-        final FileConfiguration fc = ConfigUtils.Configs.CONFIG.getConfig();
+        FileConfiguration fc = ConfigUtils.Configs.CONFIG.getConfig();
+        int requiredDetections = fc.getInt("blacklist.detects");
+        int detections = getDetectionsCount(ip);
+
+        return detections >= requiredDetections;
+    }
+
+    private static int getDetectionsCount(String ip) {
         HashMap<String, String> params = new HashMap<>();
         params.put("ip", ip);
-        String r = RequestUtils.post("https://www.ipvoid.com/ip-blacklist-check/", params);
-        int detections = Integer.parseInt(r.split("Detections Count")[1].split("\">")[1].split("/")[0]);
+        String response = RequestUtils.post("https://www.ipvoid.com/ip-blacklist-check/", params);
+        String[] splitResponse = response.split("Detections Count");
 
-        if (detections >= fc.getInt("blacklist.detects")) {
-            return true;
+        if (splitResponse.length > 1) {
+            String[] countParts = splitResponse[1].split("\">");
+            if (countParts.length > 1) {
+                String[] countSplit = countParts[1].split("/");
+                if (countSplit.length > 0) {
+                    try {
+                        return Integer.parseInt(countSplit[0]);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
 
-        return false;
+        return 0;
     }
 }

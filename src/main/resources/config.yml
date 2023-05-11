@@ -1,16 +1,20 @@
 messages:
-  proxy: '&cProxy is not allowed!'
-  firewall: '&cYour country is not allowed on this server!'
+  proxy: '&cProxy usage is not allowed!'
+  firewall: '&cYour country is not permitted on this server!'
+  ping: '&cPlease add the server to your server list first!'
 
-iphub: #Please register in iphub.info, enter login and password (for AntiVPN)
+iphub: # Register at iphub.info and enter your login and password for AntiVPN
   enabled: false
   login: ''
   password: ''
 
+ping: # Verify if the user pinged the server before joining
+  enabled: true
+
 firewall:
   enabled: false
-  blocked: false #If true black country list, If false - allowed country list
-  list: #Default countries from CIS
+  blocked: false # If true, use a blacklist of countries; if false, use an allowed countries list
+  list: # Default list of countries from CIS
     - AM
     - AZ
     - BY
@@ -22,28 +26,28 @@ firewall:
     - UZ
     - UA
 
-blacklist: #Addition IP analyzer (when player in game)
+blacklist: # Additional IP analyzer (when a player is in-game)
   enabled: true
-  detects: 2 #Min detects to punish
-  actions: #Actions with console syntax | Placeholders: %player% - name %ip% - ip address
-    - 'ban-ip %ip% Blacklist!'
-    - 'ban %player% Started using vpn? It is forbidden here...'
+  detects: 5 # Minimum number of detections to trigger punishment
+  actions: # Console actions with placeholders: %player% - player name, %ip% - IP address
+    - 'ban-ip %ip% Blacklisted!'
+    - "ban %player% Using a VPN? That's not allowed here..."
 
-passwords: #Passwords analyzer
+passwords: # Password analyzer
   enabled: true
-  matches: 3 #Matches to punish
-  storage: 15 #Max passwords to save
+  matches: 3 # Number of matches to trigger punishment
+  storage: 15 # Maximum number of passwords to store
   handleList:
     - /reg
     - /register
   actions:
     - 'ban-ip %ip%'
 
-chat: #Chat analyzer
+chat: # Chat analyzer
   enabled: true
-  coefficient: 0.9 #The percentage of similarity of the last two messages (90%)
-  seconds: 180 #The time that the check will be valid from the moment player log in to the server (3 minutes)
-  flags: 3 #Flags to punish
+  coefficient: 0.9 # Similarity threshold for the last two messages (90%)
+  seconds: 180 # Time window for the check, starting when player logs in (3 minutes)
+  flags: 3 # Number of flags to trigger punishment
   handleList:
     - /m
     - /msg
@@ -53,9 +57,14 @@ chat: #Chat analyzer
   actions:
     - 'kick %player% ChatBot!'
 
-nicks: #Nicks analyzer
+nicks: # Username analyzer
   enabled: true
-  coefficient: 0.8 #Percentage of similarity of nicknames (80%)
-  storage: 10 #Max nicks to save
+  coefficient: 0.8 # Similarity threshold for usernames (80%)
+  storage: 10 # Maximum number of usernames to store
+  prefix: # Prefix identification in the username
+    # Check range for number of characters
+    from: 4
+    to: 8
+  frequentCase: 4 # Min value for alternating letter-digit pattern or letter-UPPER check (e.g., AeBcDeF or a1b2c3d4)
   actions:
     - 'ban-ip %ip%'

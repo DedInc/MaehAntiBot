@@ -59,31 +59,7 @@ public class StringUtils {
         return chars;
     }
 
-    public static String setPlacehoders(String s, String ip, String name) {
+    public static String setPlaceholders(String s, String ip, String name) {
         return s.replaceAll("%ip%",  ip).replaceAll("%player%", name);
-    }
-
-    public static int getUniqueCount(String s1) {
-        String s2 = s1.toLowerCase();
-        StringBuffer sb = new StringBuffer(s2);
-        int l = sb.length();
-        int count = 0;
-        for (int i = 0; i < l; i++) {
-            count = 0;
-            for (int j = i + 1; j < l; j++) {
-                if (sb.charAt(i) == sb.charAt(j)) {
-                    sb.deleteCharAt(j);
-                    count++;
-                    j--;
-                    l--;
-                }
-            }
-            if (count > 0) {
-                sb.deleteCharAt(i);
-                i--;
-                l--;
-            }
-        }
-        return sb.length();
     }
 }

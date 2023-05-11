@@ -49,7 +49,7 @@ public class CommandEvent implements Listener {
                             if (lastPasswords.get(name).equals(password)) {
                                 Bukkit.getScheduler().runTask(plugin, () -> {
                                     for (String action : fc.getStringList("passwords.actions")) {
-                                        Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), StringUtils.setPlacehoders(action, ip, nick));
+                                        Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), StringUtils.setPlaceholders(action, ip, nick));
                                     }
                                 });
                                 return;
