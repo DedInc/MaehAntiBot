@@ -21,7 +21,7 @@ public class AnalyzeUtils {
             if (Storage.flagList.get(name) >= config.getInt("chat.flags")) {
                 cleanUpPlayerData(name);
 
-                Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                Bukkit.getScheduler().runTask(plugin, () -> {
                     for (String action : config.getStringList("chat.actions")) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), StringUtils.setPlaceholders(action, ip, name));
                     }

@@ -122,7 +122,8 @@ public class JoinEvent implements Listener {
     private void checkNumericNicks(String ip, UUID uuid, FileConfiguration config) {
         Map<String, UUID> numericNicks = getNumericNicks(uuid);
 
-        if (getPlayerName(uuid).matches("\\d+")) {
+        String playerName = getPlayerName(uuid);
+        if (playerName != null && playerName.matches("\\d+")) {
             if (isOverThreshold(numericNicks.size())) {
                 for (UUID uuuid : numericNicks.values()) {
                     executeActionsForNicks(config, ip, uuid, uuuid);
@@ -134,7 +135,8 @@ public class JoinEvent implements Listener {
     private void checkRandomizedNicks(String ip, UUID uuid, FileConfiguration config) {
         Map<String, UUID> randomizedNicks = getRandomizedNicks(uuid);
 
-        if (isRandomized(getPlayerName(uuid))) {
+        String playerName = getPlayerName(uuid);
+        if (playerName != null && isRandomized(playerName)) {
             if (isOverThreshold(randomizedNicks.size())) {
                 for (UUID uuuid : randomizedNicks.values()) {
                     executeActionsForNicks(config, ip, uuid, uuuid);
@@ -212,7 +214,7 @@ public class JoinEvent implements Listener {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), StringUtils.setPlaceholders(action, ip, getPlayerName(uuid)));
                     }
                 }
-        }.runTaskAsynchronously(plugin);
+        }.runTask(plugin);
     }
 
     private void updateLastNamesStorage(UUID uuid, FileConfiguration fc) {

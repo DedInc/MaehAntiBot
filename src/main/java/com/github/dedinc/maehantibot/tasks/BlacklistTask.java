@@ -23,7 +23,7 @@ public class BlacklistTask extends BukkitRunnable {
     public void run() {
         final FileConfiguration fc = ConfigUtils.Configs.CONFIG.getConfig();
         if (BlacklistUtils.checkIP(ip)) {
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            Bukkit.getScheduler().runTask(plugin, () -> {
                 for (String action : fc.getStringList("blacklist.actions")) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), StringUtils.setPlaceholders(action, ip, name));
                 }

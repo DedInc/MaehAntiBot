@@ -26,7 +26,7 @@ public class LoginEvent implements Listener {
         final String nick = e.getPlayer().getName();
 
         if (fc.getBoolean("blacklist.enabled")) {
-            new BlacklistTask(plugin, ip, nick).runTaskAsynchronously(plugin);
+            new BlacklistTask(plugin, ip, nick).runTask(plugin);
         }
 
         if (fc.getBoolean("chat.enabled")) {
