@@ -110,7 +110,7 @@ public class NicksHandler {
                         LinkedHashMap::new
                 ))
                 .entrySet().stream()
-                .filter(entry -> entry.getKey().matches("\\d+"))
+                .filter(entry -> entry.getKey() != null && entry.getKey().matches("\\d+"))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
