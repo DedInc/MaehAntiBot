@@ -9,32 +9,32 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class EventManager {
 
-    public static void register(JavaPlugin plugin) {
+    public static void register() {
         final FileConfiguration fc = ConfigUtils.Configs.CONFIG.getConfig();
 
         if (fc.getBoolean("ping.enabled")) {
-            new PingEvent(plugin);
+            new PingEvent();
         }
 
         if (fc.getBoolean("iphub.enabled") || fc.getBoolean("firewall.enabled") || fc.getBoolean("nicks.enabled")) {
-            new JoinEvent(plugin);
+            new JoinEvent();
         }
 
         if (fc.getBoolean("passwords.enabled") || fc.getBoolean("chat.enabled")) {
-            new CommandEvent(plugin);
+            new CommandEvent();
             Bukkit.getLogger().info("Passwords analyze enabled!");
         }
 
         if (fc.getBoolean("chat.enabled")) {
-            new ChatEvent(plugin);
+            new ChatEvent();
         }
 
         if (fc.getBoolean("chat.enabled") || fc.getBoolean("blacklist.enabled")) {
-            new LoginEvent(plugin);
+            new LoginEvent();
         }
     }
 
-    public static void unregister(JavaPlugin plugin) {
-        HandlerList.unregisterAll(plugin);
+    public static void unregister() {
+        HandlerList.unregisterAll();
     }
 }

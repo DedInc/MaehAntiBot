@@ -2,18 +2,19 @@ package com.github.dedinc.maehantibot.tasks;
 
 import com.github.dedinc.maehantibot.Storage;
 import org.bukkit.scheduler.BukkitRunnable;
+import java.util.UUID;
 
 public class AnalyzeTask extends BukkitRunnable {
-    private final String name;
+    private final UUID uuid;
 
-    public AnalyzeTask(String name) {
-        this.name = name;
+    public AnalyzeTask(UUID uuid) {
+        this.uuid = uuid;
     }
 
     @Override
     public void run() {
-        Storage.analyzeList.remove(name);
-        Storage.flagList.remove(name);
-        Storage.tasks.remove(name);
+        Storage.analyzeList.remove(uuid);
+        Storage.flagList.remove(uuid);
+        Storage.tasks.remove(uuid);
     }
 }

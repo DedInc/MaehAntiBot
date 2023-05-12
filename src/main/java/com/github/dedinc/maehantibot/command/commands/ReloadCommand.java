@@ -15,18 +15,18 @@ public class ReloadCommand implements CommandExecutor {
 
     private static JavaPlugin plugin;
 
-    public ReloadCommand(JavaPlugin plugin) {
-        this.plugin = plugin;
+    public ReloadCommand() {
+        this.plugin = MaehAntiBot.getInstance();
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Bukkit.getScheduler().cancelTasks(plugin);
-        EventManager.unregister(plugin);
+        EventManager.unregister();
         Messages.unloadMessages();
         Storage.cleanup();
-        new ConfigUtils(plugin);
-        EventManager.register(plugin);
+        new ConfigUtils();
+        EventManager.register();
         Messages.loadMessages();
         MaehAntiBot.logFeatureStatus();
         sender.sendMessage("Reloaded!");

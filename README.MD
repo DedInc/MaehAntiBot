@@ -29,6 +29,7 @@ messages:
   proxy: '&cProxy usage is not allowed!'
   firewall: '&cYour country is not permitted on this server!'
   ping: '&cPlease add the server to your server list first!'
+  nick: '&cYou have a suspicious nickname!'
 
 iphub: # Register at iphub.info and enter your login and password for AntiVPN
   enabled: false
@@ -53,7 +54,7 @@ firewall:
     - UZ
     - UA
 
-blacklist: # Additional IP analyzer (when a player is in-game)
+blacklist: # Additional IP analyzer (when a player is in-game) with ipvoid.com/ip-blacklist-check (you can test it and configure)
   enabled: true
   detects: 5 # Minimum number of detections to trigger punishment
   actions: # Console actions with placeholders: %player% - player name, %ip% - IP address
@@ -75,6 +76,7 @@ chat: # Chat analyzer
   coefficient: 0.9 # Similarity threshold for the last two messages (90%)
   seconds: 180 # Time window for the check, starting when player logs in (3 minutes)
   flags: 3 # Number of flags to trigger punishment
+  storage: 5 # Maximum number of messages per player to store
   handleList:
     - /m
     - /msg

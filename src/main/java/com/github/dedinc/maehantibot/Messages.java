@@ -2,7 +2,6 @@ package com.github.dedinc.maehantibot;
 
 import com.github.dedinc.maehantibot.utils.ConfigUtils;
 import org.bukkit.configuration.file.FileConfiguration;
-
 import java.lang.reflect.Field;
 
 public class Messages {
@@ -10,6 +9,7 @@ public class Messages {
     public static String proxy = null;
     public static String firewall = null;
     public static String ping = null;
+    public static String nick = null;
 
     public static void loadMessages() {
         FileConfiguration fc = ConfigUtils.Configs.CONFIG.getConfig();

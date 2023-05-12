@@ -1,6 +1,6 @@
 name: MaehAntiBot
-description: Make your server cleaned from retards!
-version: 1.2
+description: Smart AntiBot Detection for Minecraft Server.
+version: 1.3
 api-version: 1.13
 author: DedInc.
 main: com.github.dedinc.maehantibot.MaehAntiBot

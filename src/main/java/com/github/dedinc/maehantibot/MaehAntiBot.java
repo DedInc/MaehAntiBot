@@ -3,77 +3,42 @@ package com.github.dedinc.maehantibot;
 import com.github.dedinc.maehantibot.command.CommandManager;
 import com.github.dedinc.maehantibot.event.EventManager;
 import com.github.dedinc.maehantibot.utils.ConfigUtils;
-import com.github.dedinc.maehantibot.utils.IPHubUtils;
+import com.github.dedinc.maehantibot.utils.handlers.FirewallHandler;
+import com.github.dedinc.maehantibot.utils.handlers.IPHubHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.zip.GZIPInputStream;
 
 public class MaehAntiBot extends JavaPlugin {
 
-    public static IPHubUtils iphu = null;
+    private static MaehAntiBot instance;
 
     @Override
     public void onEnable() {
+        instance = this;
         setupConfiguration();
-        downloadAndExtractGeoIPData();
+        FirewallHandler.downloadAndExtractGeoIPData();
 
         FileConfiguration fc = ConfigUtils.Configs.CONFIG.getConfig();
 
-        setupIPHub(fc);
+        IPHubHandler.setupIPHub(fc);
 
-        CommandManager.load(this);
-        EventManager.register(this);
+        CommandManager.load();
+        EventManager.register();
         logFeatureStatus();
     }
 
+    @Override
+    public void onDisable() {
+        Bukkit.getScheduler().cancelTasks(this);
+        EventManager.unregister();
+        Messages.unloadMessages();
+        Storage.cleanup();
+    }
+
     private void setupConfiguration() {
-        new ConfigUtils(this);
+        new ConfigUtils();
         Messages.loadMessages();
-    }
-
-    private void downloadAndExtractGeoIPData() {
-        Path geo = Paths.get("plugins", "MaehAntiBot", "GeoIP.dat.gz");
-        Path geoIP = Paths.get("plugins", "MaehAntiBot", "GeoIP.dat");
-
-        if (geoIP.toFile().exists()) {
-            return;
-        }
-
-        try {
-            InputStream in = new URL("https://mailfud.org/geoip-legacy/GeoIP.dat.gz").openStream();
-            Files.copy(in, geo, StandardCopyOption.REPLACE_EXISTING);
-
-            try (GZIPInputStream gis = new GZIPInputStream(new FileInputStream(geo.toFile()));
-                 FileOutputStream fos = new FileOutputStream(geoIP.toFile())) {
-
-                byte[] buffer = new byte[1024];
-                int len;
-                while ((len = gis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
-                }
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        geo.toFile().delete();
-    }
-
-    private void setupIPHub(FileConfiguration fc) {
-        if (fc.getBoolean("iphub.enabled")) {
-            iphu = new IPHubUtils(fc.getString("iphub.login"), fc.getString("iphub.password"));
-        }
     }
 
     public static void logFeatureStatus() {
@@ -98,11 +63,7 @@ public class MaehAntiBot extends JavaPlugin {
         }
     }
 
-    @Override
-    public void onDisable() {
-        Bukkit.getScheduler().cancelTasks(this);
-        EventManager.unregister(this);
-        Messages.unloadMessages();
-        Storage.cleanup();
+    public static MaehAntiBot getInstance() {
+        return instance;
     }
 }

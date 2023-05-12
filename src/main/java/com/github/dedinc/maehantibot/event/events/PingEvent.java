@@ -1,5 +1,6 @@
 package com.github.dedinc.maehantibot.event.events;
 
+import com.github.dedinc.maehantibot.MaehAntiBot;
 import com.github.dedinc.maehantibot.Storage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,8 +11,8 @@ public class PingEvent implements Listener  {
 
     private JavaPlugin plugin;
 
-    public PingEvent(JavaPlugin plugin) {
-        this.plugin = plugin;
+    public PingEvent() {
+        this.plugin = MaehAntiBot.getInstance();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 

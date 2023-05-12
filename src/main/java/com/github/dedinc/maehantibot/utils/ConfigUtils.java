@@ -1,5 +1,6 @@
 package com.github.dedinc.maehantibot.utils;
 
+import com.github.dedinc.maehantibot.MaehAntiBot;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,8 +13,8 @@ public class ConfigUtils {
     private JavaPlugin plugin;
     private static ConfigUtils instance;
 
-    public ConfigUtils(JavaPlugin plugin) {
-        this.plugin = plugin;
+    public ConfigUtils() {
+        this.plugin = MaehAntiBot.getInstance();
         this.instance = this;
         createConfigs();
     }
